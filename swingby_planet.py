@@ -8,9 +8,9 @@ input_file = open("dat.txt", "w")
 
 
 G = 6.67430e-11  # gravitational constant, m^3 kg^-1 s^-2
-M_jupiter = 5.972e24  # mass of the jupiter, kg
+M_jupiter = 1898e24  # mass of the jupiter, kg
 M_satellite = 500  # mass of the satellite, kg (arbitrarily chosen for visualization)
-R_jupiter = 6.371e6  # radius of the jupiter, m
+R_jupiter = 71492  # radius of the jupiter, m
 
 # Initial conditions
 r0 = R_jupiter + 400e3  # initial satellite distance from jupiter's center, m (400 km altitude)

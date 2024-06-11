@@ -1,0 +1,53 @@
+MERCURY
+Mass = 0.330e24 kg
+Radius = 2439.5 km
+Orbital Velocity = 47.4 km/s
+
+VENUS
+Mass = 4.87e24 kg
+Radius = 6052 km
+Orbital Velocity = 35.0 km/s
+
+EARTH
+Mass = 5.97e24 kg
+Radius = 6378 km
+Orbital Velocity =	29.8 km/s
+
+MOON
+Mass = 0.073e24 kg
+Radius = 1737.5 km
+Orbital Velocity = 1.0 km/s (relative to the Earth)
+
+MARS
+Mass = 0.642e24 kg
+Radius = 3396 km
+Orbital Velocity = 24.1 km/s
+
+JUPITER
+Mass = 1898e24 kg
+Radius = 71492 km
+Orbital Velocity = 13.1 km/s
+
+SATURN
+Mass = 568e24 kg
+Radius = 60268 km
+Orbital Velocity = 9.7 km/s
+
+URANUS
+Mass = 86.8e24 kg
+Radius = 25559 km
+Orbital Velocity = 6.8 km/s
+
+NEPTUNE
+Mass = 102e24 kg
+Radius = 24764 km
+Orbital Velocity = 5.4 km/s
+
+PLUTO
+Mass = 	0.0130e24 kg
+Radius = 1188 km
+Orbital Velocity = 4.7 km/s
+
+
+Source:
+https://nssdc.gsfc.nasa.gov/planetary/factsheet/ 
