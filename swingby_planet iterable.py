@@ -1,11 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import csv
 input_file = open("dat.txt", "w")
 
-# Constants
-#TODO: Make iterable for different starting conditions for different cases (e.g. above/below jupiter)
 
+#TODO: Make iterable for different starting conditions for different cases (e.g. above/below jupiter)
+#TODO: Automate graphing dist/time velocity/time velocity/distance with np in jupyter notebook 
+# Constants
 
 G = 6.67430e-11  # gravitational constant, m^3 kg^-1 s^-2
 M_jupiter = 1898e24  # mass of the jupiter, kg
@@ -13,7 +15,7 @@ M_satellite = 1000  # mass of the satellite, kg (arbitrarily chosen for visualiz
 R_jupiter = 71492e3  # radius of the jupiter, m
 
 # Initial conditions
-r0 = R_jupiter + 1.5e10  # initial satellite distance from jupiter's center, m 
+r0 = R_jupiter + 500e7  # initial satellite distance from jupiter's center, m 
 ve0 = 13.1e3  # m/s, jupiter's initial speed
 vs0 = 40e3  # initial speed for a circular orbit, m/s
 stheta = 12 # angle of satellite compared to Jupiter (degrees)
@@ -23,8 +25,9 @@ initial_state = [0, 0, 0, ve0, -r0, 0, vs0*np.cos(np.radians(stheta)), vs0*np.si
 
 # Time parameters
 t0 = 0
-tf = (2*r0)/vs0
-n_steps = 3000
+orbit_period = 10 * 2 * np.pi * np.sqrt(r0**3 / (G * M_jupiter))
+tf = orbit_period
+n_steps = 30000
 dt = (tf - t0) / n_steps
 
 # Initialize arrays to store the solution
@@ -78,10 +81,29 @@ for i in range(n_steps):
     vx_sat_values[i + 1] = vx_sat_values[i] + 0.5 * (ax_sat + ax_sat_new) * dt
     vy_sat_values[i + 1] = vy_sat_values[i] + 0.5 * (ay_sat + ay_sat_new) * dt
     
-for i in range(n_steps):
-    input_file.write(f"{t_values[i]} {vx_sat_values[i]} {vy_sat_values[i]} {x_sat_values[i]} {y_sat_values[i]}\n")
 
-input_file.close()
+
+
+
+#record and update index (dat(i).csv)
+ind = 0
+with open('data\\indecies.txt') as f:
+    first_line = f.readline().strip()
+    ind = int(first_line)
+
+indecies = open('data\\indecies.txt', 'w')
+indecies.write(str(ind+1))
+indecies.close()
+
+#record data
+with open(f'data\\dat{ind}.csv', 'w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(['t', 'V', 'theta', 'vX', 'vY ', 'X', 'Y'])  # header
+    for i in range(n_steps):
+
+        writer.writerow([t_values[i], np.sqrt((vx_sat_values[i]**2 + vy_sat_values[i]**2)), np.degrees(np.arctan(vy_sat_values[i]/vx_sat_values[i])),   vx_sat_values[i], vy_sat_values[i], x_sat_values[i], y_sat_values[i]])  # Write data
+
+
 
 # Create the animation
 fig, ax = plt.subplots(figsize=(8, 8))
@@ -105,6 +127,6 @@ def update(frame):
     trail.set_data(x_sat_values[:frame], y_sat_values[:frame])
     return jupiter, satellite, trail
 
-ani = FuncAnimation(fig, update, frames=len(t_values), init_func=init, blit=True, interval=1)
+ani = FuncAnimation(fig, update, frames=len(t_values), init_func=init, blit=True, interval=50)
 
 plt.show()
