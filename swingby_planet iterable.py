@@ -4,6 +4,8 @@ from matplotlib.animation import FuncAnimation
 input_file = open("dat.txt", "w")
 
 # Constants
+#TODO: Make iterable for different starting conditions for different cases (e.g. above/below jupiter)
+
 
 G = 6.67430e-11  # gravitational constant, m^3 kg^-1 s^-2
 M_jupiter = 1898e24  # mass of the jupiter, kg
@@ -11,7 +13,7 @@ M_satellite = 1000  # mass of the satellite, kg (arbitrarily chosen for visualiz
 R_jupiter = 71492e3  # radius of the jupiter, m
 
 # Initial conditions
-r0 = R_jupiter + 500e7  # initial satellite distance from jupiter's center, m 
+r0 = R_jupiter + 1.5e10  # initial satellite distance from jupiter's center, m 
 ve0 = 13.1e3  # m/s, jupiter's initial speed
 vs0 = 40e3  # initial speed for a circular orbit, m/s
 stheta = 12 # angle of satellite compared to Jupiter (degrees)
@@ -21,9 +23,8 @@ initial_state = [0, 0, 0, ve0, -r0, 0, vs0*np.cos(np.radians(stheta)), vs0*np.si
 
 # Time parameters
 t0 = 0
-orbit_period = 10 * 2 * np.pi * np.sqrt(r0**3 / (G * M_jupiter))
-tf = orbit_period
-n_steps = 30000
+tf = (2*r0)/vs0
+n_steps = 3000
 dt = (tf - t0) / n_steps
 
 # Initialize arrays to store the solution
@@ -104,6 +105,6 @@ def update(frame):
     trail.set_data(x_sat_values[:frame], y_sat_values[:frame])
     return jupiter, satellite, trail
 
-ani = FuncAnimation(fig, update, frames=len(t_values), init_func=init, blit=True, interval=50)
+ani = FuncAnimation(fig, update, frames=len(t_values), init_func=init, blit=True, interval=1)
 
 plt.show()
