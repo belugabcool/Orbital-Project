@@ -1,0 +1,56 @@
+From bottom left V decreases:
+    # Initial conditions
+    r0 = R_jupiter + 1.5e10  # initial satellite distance from jupiter's center, m 
+    ve0 = 13.1e3  # m/s, jupiter's initial speed
+    vs0 = 5e4  # initial speed for a circular orbit, m/s
+    stheta = 56.25 # angle of satellite compared to Jupiter (degrees)
+
+
+    initial_state = [0, 0, 0, ve0, -r0/2, -r0/2, vs0*np.cos(np.radians(stheta)), vs0*np.sin(np.radians(stheta))]  # [x_jupiter, y_jupiter, vx_jupiter, vy_jupiter, x_sat, y_sat, vx_sat, vy_sat]
+
+
+From top left:
+    # Initial conditions
+    r0 = R_jupiter + 1.5e10  # initial satellite distance from jupiter's center, m 
+    ve0 = 13.1e3  # m/s, jupiter's initial speed
+    vs0 = 5e4  # initial speed for a circular orbit, m/s
+    stheta = -33 - .25 # angle of satellite compared to Jupiter (degrees)
+
+
+    initial_state = [0, 0, 0, ve0, -r0/2, r0/2, vs0*np.cos(np.radians(stheta)), vs0*np.sin(np.radians(stheta))]  # [x_jupiter, y_jupiter, vx_jupiter, vy_jupiter, x_sat, y_sat, vx_sat, vy_sat]
+
+Loop around:
+    G = 6.67430e-11  # gravitational constant, m^3 kg^-1 s^-2
+    M_jupiter = 1898e24  # mass of the jupiter, kg
+    M_satellite = 1000  # mass of the satellite, kg (arbitrarily chosen for visualization)
+    R_jupiter = 71492e3  # radius of the jupiter, m
+
+    # Initial conditions
+    r0 = R_jupiter + 1.5e10  # initial satellite distance from jupiter's center, m 
+    ve0 = 13.1e3  # m/s, jupiter's initial speed
+    vs0 = 10e3  # initial speed for a circular orbit, m/s
+    stheta = 27 - .25 # angle of satellite compared to Jupiter (degrees)
+
+
+    initial_state = [0, 0, 0, ve0, -r0, r0, vs0*np.cos(np.radians(stheta)), vs0*np.sin(np.radians(stheta))]  # [x_jupiter, y_jupiter, vx_jupiter, vy_jupiter, x_sat, y_sat, vx_sat, vy_sat]
+
+Loop around 2:
+
+    # Initial conditions
+    r0 = R_jupiter + 1.5e10  # initial satellite distance from jupiter's center, m 
+    ve0 = 13.1e3  # m/s, jupiter's initial speed
+    vs0 = 10e3  # initial speed for a circular orbit, m/s
+    stheta = 29 - .25 # angle of satellite compared to Jupiter (degrees)
+
+
+    initial_state = [0, 0, 0, ve0, -r0, r0, vs0*np.cos(np.radians(stheta)), vs0*np.sin(np.radians(stheta))]  # [x_jupiter, y_jupiter, vx_jupiter, vy_jupiter, x_sat, y_sat, vx_sat, vy_sat]
+
+Loop around 3 (decreasing):
+    # Initial conditions
+    r0 = R_jupiter + 1.5e10  # initial satellite distance from jupiter's center, m 
+    ve0 = 13.1e3  # m/s, jupiter's initial speed
+    vs0 = 10e3  # initial speed for a circular orbit, m/s
+    stheta = 35 - .25 # angle of satellite compared to Jupiter (degrees)
+
+
+    initial_state = [0, 0, 0, ve0, -r0, r0, vs0*np.cos(np.radians(stheta)), vs0*np.sin(np.radians(stheta))]  # [x_jupiter, y_jupiter, vx_jupiter, vy_jupiter, x_sat, y_sat, vx_sat, vy_sat]
