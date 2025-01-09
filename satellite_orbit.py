@@ -29,7 +29,12 @@ vy_v = np.zeros(n_steps + 1)
 x_v[0], y_v[0] = initial_state[0], initial_state[1]
 vx_v[0], vy_v[0] = initial_state[2], initial_state[3]
 
-# velocity verlet
+# velocity verlet (newton grav)
+# ax = g * m * (delta x) / r^3 
+# ay = g * m * (delta y) / r^3 
+# x = x + vx * timestep + 0.5 * ax * time step^2 
+# y = y + yx * timestep + 0.5 * ay * time step^2 
+# delta v = 0.5 * (a[t] + a[t+1]) * time step 
 for i in range(n_steps):
     r = np.sqrt(x_v[i]**2 + y_v[i]**2)
     ax = -G * M * x_v[i] / r**3

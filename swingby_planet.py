@@ -44,35 +44,31 @@ vx_jupiter_values[0], vy_jupiter_values[0] = initial_state[2], initial_state[3]
 x_sat_values[0], y_sat_values[0] = initial_state[4], initial_state[5]
 vx_sat_values[0], vy_sat_values[0] = initial_state[6], initial_state[7]
 
-# Velocity Verlet method to solve the equations of motion
+
 for i in range(n_steps):
     r = np.sqrt((x_sat_values[i] - x_jupiter_values[i])**2 + (y_sat_values[i] - y_jupiter_values[i])**2)
     
-    # check for collision between satellite and jupiter
     dist = np.sqrt((x_sat_values[i]-x_jupiter_values[i])**2 + (y_sat_values[i]-y_jupiter_values[i])**2)
     if dist < R_jupiter:
         break 
     
-    # Accelerations
     ax_jupiter = G * M_satellite * (x_sat_values[i] - x_jupiter_values[i]) / r**3
     ay_jupiter = G * M_satellite * (y_sat_values[i] - y_jupiter_values[i]) / r**3
     ax_sat = -G * M_jupiter * (x_sat_values[i] - x_jupiter_values[i]) / r**3
     ay_sat = -G * M_jupiter * (y_sat_values[i] - y_jupiter_values[i]) / r**3
     
-    # Update positions
     x_jupiter_values[i + 1] = x_jupiter_values[i] + vx_jupiter_values[i] * dt + 0.5 * ax_jupiter * dt**2
     y_jupiter_values[i + 1] = y_jupiter_values[i] + vy_jupiter_values[i] * dt + 0.5 * ay_jupiter * dt**2
     x_sat_values[i + 1] = x_sat_values[i] + vx_sat_values[i] * dt + 0.5 * ax_sat * dt**2
     y_sat_values[i + 1] = y_sat_values[i] + vy_sat_values[i] * dt + 0.5 * ay_sat * dt**2
     
-    # Calculate new accelerations
     r_new = np.sqrt((x_sat_values[i + 1] - x_jupiter_values[i + 1])**2 + (y_sat_values[i + 1] - y_jupiter_values[i + 1])**2)
     ax_jupiter_new = G * M_satellite * (x_sat_values[i + 1] - x_jupiter_values[i + 1]) / r_new**3
     ay_jupiter_new = G * M_satellite * (y_sat_values[i + 1] - y_jupiter_values[i + 1]) / r_new**3
     ax_sat_new = -G * M_jupiter * (x_sat_values[i + 1] - x_jupiter_values[i + 1]) / r_new**3
     ay_sat_new = -G * M_jupiter * (y_sat_values[i + 1] - y_jupiter_values[i + 1]) / r_new**3
     
-    # Update velocities
+
     vx_jupiter_values[i + 1] = vx_jupiter_values[i] + 0.5 * (ax_jupiter + ax_jupiter_new) * dt
     vy_jupiter_values[i + 1] = vy_jupiter_values[i] + 0.5 * (ay_jupiter + ay_jupiter_new) * dt
     vx_sat_values[i + 1] = vx_sat_values[i] + 0.5 * (ax_sat + ax_sat_new) * dt
@@ -86,13 +82,12 @@ for i in range(n_steps):
 
 input_file.close()
 
-# Create the animation
 fig, ax = plt.subplots(figsize=(8, 8))
 ax.set_aspect('equal')
 scale_lim = 1.5
 ax.set_xlim(-scale_lim*r0, scale_lim*r0)
 ax.set_ylim(-scale_lim*r0, scale_lim*r0)
-jupiter, = ax.plot([], [], 'o', color='b', markersize=10)  # Exaggerated size for visibility
+jupiter, = ax.plot([], [], 'o', color='b', markersize=10)  
 satellite, = ax.plot([], [], 'o', color='red')
 trail, = ax.plot([], [], '-', color='green', lw=1, alpha=0.5)
 
