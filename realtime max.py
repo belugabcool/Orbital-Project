@@ -15,16 +15,16 @@ R_jupiter = 71492e3  # radius of the jupiter, m
 
 # Initial conditions
 r0 = R_jupiter + 1.5e10  # initial satellite distance from jupiter's center, m 
-ve0 = 13.1e3 * 0  # m/s, jupiter's initial speed
-vs0 = 10e3 + 15e3  # earth speed +  initial speed for a circular orbit, m/s (e.g. Pinoeer at 56 km/s, fastest)
-stheta = -35 - .8 # angle of satellite compared to Jupiter (degrees)
+ve0 = 13.1e3 # m/s, jupiter's initial speed
+vs0 = 40e3 # earth speed +  initial speed for a circular orbit, m/s (e.g. Pinoeer at 56 km/s, fastest)
+stheta = 32.083 # angle of satellite compared to Jupiter (degrees)
 
 
-initial_state = [0, 0.5e10, 0, 0, -r0, r0*1.1, vs0*np.cos(np.radians(stheta)), vs0*np.sin(np.radians(stheta))]  # [x_jupiter, y_jupiter, vx_jupiter, vy_jupiter, x_sat, y_sat, vx_sat, vy_sat]
+initial_state = [0, 0, 0, ve0, -r0, -r0*0.25, vs0*np.cos(np.radians(stheta)), vs0*np.sin(np.radians(stheta))]  # [x_jupiter, y_jupiter, vx_jupiter, vy_jupiter, x_sat, y_sat, vx_sat, vy_sat]
 
 # Time parameters
 t0 = 0
-tf = (4*r0)/vs0
+tf = (5*r0)/vs0
 n_steps = 50000
 dt = (tf - t0) / n_steps
 
@@ -87,53 +87,72 @@ for i in range(n_steps):
 
 input_file.close()
 
-# Create the animation
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 12))
+
+# Set background color to black
+fig.patch.set_facecolor('black')
+ax1.set_facecolor('black')
+ax2.set_facecolor('black')
+
+# Set the aspect ratio and limits
 ax1.set_aspect('equal')
 scale_lim = 10
 ax1.set_xlim(-scale_lim*2.5e9, scale_lim*2.5e9)
 ax1.set_ylim(1e9, scale_lim*3e9)
-jupiter, = ax1.plot([], [], 'o', color='b', markersize=10)  # Exaggerated size for visibility
+
+# Plot Jupiter and satellite
+jupiter, = ax1.plot([], [], 'o', color='cyan', markersize=10)  # Exaggerated size for visibility
+jTrail, = ax1.plot([], [], '-', color='cyan', lw=1, alpha=1)  # Change trail to blue
 satellite, = ax1.plot([], [], 'o', color='red')
-trail, = ax1.plot([], [], '-', color='Black', lw=1, alpha=0.5)
+trail, = ax1.plot([], [], '-', color='red', lw=1, alpha=1)  # Change trail to white
 
+# Customize ax2
 ax2.set_xlim(-scale_lim*r0/10, scale_lim*r0/10)
-ax2.set_ylim(20000, np.max(np.sqrt(vx_sat_values**2 + vy_sat_values**2)) + 5000)
+ax2.set_ylim(20000, np.max(np.sqrt(vx_sat_values**2 + vy_sat_values**2)) + 25000)
 
+# Speed plot
 speed_line, = ax2.plot([], [], 'r-', label='Speed (m/s)')
-ax2.axhline(y=25000, color='blue', linestyle='--', label='Base Speed')  # Add flat line at 25000
+ax2.axhline(y=40000, color='dodgerblue', linestyle='--', label='Base Speed') 
+ax2.axhline(y=40000 + 13.1e3, color='green', linestyle='--', label='Base Speed + Jupiter\'s Speed')  
+ax2.axhline(y=40000 - 13.1e3, color='orange', linestyle='--', label='Base Speed - Jupiter\'s Speed')  
 
-ax2.set_xlabel('Position x (m)')
-ax2.set_ylabel('Speed (m/s)')
-ax2.legend()
+# Set white labels and title
+ax2.set_xlabel('Position x (m)', color='white')
+ax2.set_ylabel('Speed (m/s)', color='white')
+ax2.legend(facecolor='black', edgecolor='white', labelcolor='white')
 
+# Change tick colors to white
+ax1.tick_params(axis='both', colors='white')
+ax2.tick_params(axis='both', colors='white')
 
-
-
-
+# Set the spine colors to white
+for spine in ax1.spines.values():
+    spine.set_color('white')
+for spine in ax2.spines.values():
+    spine.set_color('white')
+plt.title(label="Orbital Swingby (Velocity Gain Case)", fontsize=20, color="white")
 def init():
     jupiter.set_data([], [])
     satellite.set_data([], [])
     trail.set_data([], [])
+    jTrail.set_data([], [])
     speed_line.set_data([], [])
-    return jupiter, satellite, trail, speed_line
+    return jupiter, satellite, trail, speed_line, jTrail
 
 def update(frame):
     frame = (frame * 100) % n_steps
     jupiter.set_data(x_jupiter_values[frame], y_jupiter_values[frame])
+    jTrail.set_data(x_jupiter_values[:frame], y_jupiter_values[:frame])
     satellite.set_data(x_sat_values[frame], y_sat_values[frame])
     trail.set_data(x_sat_values[:frame], y_sat_values[:frame])
    
     speed = np.sqrt(vx_sat_values[frame]**2 + vy_sat_values[frame]**2)
     speed_line.set_data(x_sat_values[:frame], np.sqrt(vx_sat_values[:frame]**2 + vy_sat_values[:frame]**2))
    
-    return jupiter, satellite, trail, speed_line
+    return jupiter, satellite, trail, speed_line, jTrail
 
 ani = FuncAnimation(fig, update, frames=len(t_values), init_func=init, blit=True, interval=0)
 
 print(f"Starting speed:{np.sqrt(vx_sat_values[0]**2 + vy_sat_values[0]**2)}, Ending speed:{np.sqrt(vx_sat_values[n_steps]**2 + vy_sat_values[n_steps]**2)}")
 
 plt.show()
-
-
-
